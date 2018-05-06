@@ -6,16 +6,43 @@ var config = {
     projectId: "traintime-8e52e",
     storageBucket: "",
     messagingSenderId: "209939284088"
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
 
 var database = firebase.database();
 
 
-database.ref().on("value", function(snapshot) {
-    console.log(snapshot.val().name);
-    console.log(this)
+var query = database.ref().orderByKey();
+query.once("value").then(function (snapshot) {
+    snapshot.forEach(function (childSnapshot) {
+
+        var newRow = $("<tr>");
+        var key = childSnapshot.key;
+        var childData = childSnapshot.val();
+        console.log(childData);
+        var column = $("<td>");
+        column.text(childData.name);
+        newRow.append(column);
+        var column = $("<td>");
+        column.text(childData.destination);
+        newRow.append(column);
+        var column = $("<td>");
+        column.text(childData.frequency);
+        newRow.append(column);
+        var column = $("<td>");
+        column.text(childData.firstTrainTime);
+        newRow.append(column);
+        var column = $("<td>");
+        column.text(childData.minutesAway);
+        newRow.append(column);
+
+        $("#tableBody").append(newRow);
+
+    });
+
 });
+
+
 
 $("#addButton").on("click", function (event) {
 
@@ -25,7 +52,7 @@ $("#addButton").on("click", function (event) {
     var newColumn;
     var trainObj = {};
 
-    $("form").find("input").each( function (index, input){
+    $("form").find("input").each(function (index, input) {
         var key = $(input).attr("name");
         var val = $(input).val();
 
@@ -51,38 +78,38 @@ $("#addButton").on("click", function (event) {
     newRow.append(column);
 
 
-var start = moment(ftt, "HH:mm");
-var end = moment();
-console.log(start)
-console.log(end)
+    var start = moment(ftt, "HH:mm");
+    var end = moment();
+    console.log(start)
+    console.log(end)
 
-// account for crossing over to midnight the next day
-if (start.isBefore(end)) start.add(1, 'day');
+    // account for crossing over to midnight the next day
+    if (start.isBefore(end)) start.add(1, 'day');
 
-var d = moment.duration(start.diff(end));
-console.log(d);
+    var d = moment.duration(start.diff(end));
+    console.log(d);
 
-var minutes = (d.minutes() + 1);
-var hour = d.hours();
-minutes = minutes + (hour * 60)
+    var minutes = (d.minutes() + 1);
+    var hour = d.hours();
+    minutes = minutes + (hour * 60)
 
-console.log(minutes);
-console.log(hour);
+    console.log(minutes);
+    console.log(hour);
 
-var column = $("<td>");
-column.text(minutes);
-newRow.append(column);
+    var column = $("<td>");
+    column.text(minutes);
+    newRow.append(column);
 
-database.ref().push({
-    name: trainObj.name,
-    destination: trainObj.destination,
-    firstTrainTime: ftt,
-    frequency: trainObj.frequency,
-    minutesAway: minutes
+    database.ref().push({
+        name: trainObj.name,
+        destination: trainObj.destination,
+        firstTrainTime: ftt,
+        frequency: trainObj.frequency,
+        minutesAway: minutes
 
-});
+    });
 
-$("#tableBody").append(newRow);
+    $("#tableBody").append(newRow);
 
 });
 
