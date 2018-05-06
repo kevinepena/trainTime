@@ -33,8 +33,9 @@ query.once("value").then(function (snapshot) {
 
         var start = moment((childData.firstTrainTime), "HH:mm");
         var end = moment();
-        if (start.isBefore(end)) start.add(1, 'day');
+        // if (start.isBefore(end)) start.add(1, 'day');
         if (start.isBefore(end)) start.add(childData.frequency, 'minutes');
+                if (start.isBefore(end)) start.add(1, 'day');
 
         column.text(moment(start).format("HH:mm"));
         newRow.append(column);
