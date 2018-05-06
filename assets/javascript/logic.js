@@ -35,7 +35,7 @@ query.once("value").then(function (snapshot) {
         var end = moment();
         // if (start.isBefore(end)) start.add(1, 'day');
         if (start.isBefore(end)) start.add(childData.frequency, 'minutes');
-                if (start.isBefore(end)) start.add(1, 'day');
+        if (start.isBefore(end)) start.add(1, 'day');
 
         column.text(moment(start).format("HH:mm"));
         newRow.append(column);
@@ -50,7 +50,8 @@ query.once("value").then(function (snapshot) {
 
         database.ref(key).update({
 
-            minutesAway: minutes});
+            minutesAway: minutes
+        });
 
         $("#tableBody").append(newRow);
 
@@ -101,7 +102,7 @@ $("#addButton").on("click", function (event) {
     var minutes = (d.minutes() + 1);
     var hour = d.hours();
     minutes = minutes + (hour * 60)
-    
+
     var column = $("<td>");
     column.text(minutes);
     newRow.append(column);
@@ -118,6 +119,8 @@ $("#addButton").on("click", function (event) {
     $("#tableBody").append(newRow);
 
 });
+
+console.log("working")
 
 // function nextArrival (ftt) {
 //     ftt = moment().format("HH:mm");
