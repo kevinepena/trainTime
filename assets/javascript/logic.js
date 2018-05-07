@@ -48,7 +48,6 @@ query.once("value").then(function (snapshot) {
         column.text(minutes);
         newRow.append(column);
 
-        console.log(start._i)
         database.ref(key).update({
             minutesAway: minutes,
             firstTrainTime: start._i
